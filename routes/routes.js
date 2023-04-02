@@ -4,13 +4,12 @@ var dbconfig = {
   password: "9c936981",
   database: "heroku_7e6d39f4f942566",
 }
-var connection = require('mysql').createConnection(dbconfig);
+var connection = require('mysql').createPool(dbconfig);
 var bcrypt = require('bcrypt-nodejs');
 
-connection.connect(function(err) {
+connection.query('USE ' + dbconfig.database, function(err, rows) {
   if (err) throw err;
   console.log("Connected!");
-  connection.query('USE ' + dbconfig.database);
 });
 
 
