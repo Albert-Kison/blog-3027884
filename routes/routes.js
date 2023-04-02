@@ -16,6 +16,7 @@ connection.connect(function(err) {
 
 module.exports = function(app, passport) {
  app.get('/', function(req, res){
+  console.log("iudhbiet iur tiurt hgiurt giurthgiurthgiurghiurhtguirhtgiurhgi rut");
   if (req.user && req.user.status === "admin") res.redirect("/admin")
   else {
     connection.query("select * from posts", function(err, rows) {
