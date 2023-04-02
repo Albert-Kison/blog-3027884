@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>Login Register</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+ <link rel="stylesheet" 
+ href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+ <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+ <!-- <div class="container"> -->
+    <header>
+
+        <nav class="navbar navbar-expand-sm navbar-dark bg-black">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Navbar</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <% if (isAuthenticated) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">Profile</a>                    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Log out</a>                    
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Log in</a>                    
+                        </li>
+                    <% } %>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+
+    <main>
+        <a href="/add_post">Add post</a>
+        <% if (posts) { %>
+            <% if (posts.length === 0) { %>
+                <p>No posts</p>
+            <% } else if (posts.length > 0) { %>
+                <div id="latest-posts">
+                <% for (let i = 0; i < posts.length; i++) { %>
+                    <div class="post">
+                        <h2><%= posts[i].title %></h2>
+                        <p><%= posts[i].content %></p>
+                        <a href="/post/<%= posts[i].post_id %>">Read</a>
+                        <a href="/edit_post/<%= posts[i].post_id %>">Edit</a>
+                        <a href="/remove_post/<%= posts[i].post_id %>">Remove</a>
+                    </div>
+                <% } %>
+                </div>
+            <% } %>
+        <% } %>
+
+        <a href="/add_user">Add user</a>
+        <% if (users.length > 1) { %>
+            <div id="users">
+            <% for (let i = 0; i < users.length; i++) { %>
+                <div class="user">
+                    <% if (users[i].user_id !== current_user.user_id) { %>
+                        <h2><%= users[i].name %></h2>
+                        <a href="/edit_user/<%= users[i].user_id %>">Edit</a>
+                        <a href="/remove_user/<%= users[i].user_id %>">Remove</a>
+                    <% } %>
+                </div>
+            <% } %>
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+
+    </main>
+    
+ <!-- </div> -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+  </body>
+</body>
+</html>
