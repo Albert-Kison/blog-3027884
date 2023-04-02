@@ -2,13 +2,13 @@ var LocalStrategy = require("passport-local").Strategy;
 
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
-var dbconfig = require('./database');
-var connection = require('mysql').createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "12345MYsql!",
-  database: "blog",
-});
+var dbconfig = {
+  host: "eu-cdbr-west-03.cleardb.net",
+  user: "bd152ac13ceb1d",
+  password: "9c936981",
+  database: "heroku_7e6d39f4f942566",
+}
+var connection = require('mysql').createConnection(dbconfig);
 
 connection.connect(function(err) {
   if (err) throw err;
