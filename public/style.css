@@ -65,3 +65,7 @@ nav a:hover {
     resize: none;
     border: none;
 }
+
+img {
+    max-width: 100%;
+}

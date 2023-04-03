@@ -49,6 +49,7 @@
                 <div id="latest-posts">
                 <% for (let i = 0; i < posts.length; i++) { %>
                     <div class="post">
+                        <img src="/<%= posts[i].img_url %>" alt="<%= posts[i].img_alt %>">
                         <h2><%= posts[i].title %></h2>
                         <p><%= posts[i].content %></p>
                         <a href="/post/<%= posts[i].post_id %>">Read</a>

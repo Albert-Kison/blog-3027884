@@ -4,8 +4,26 @@ var dbconfig = {
   password: "9c936981",
   database: "heroku_7e6d39f4f942566",
 }
+
+// var dbconfig = {
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "12345MYsql!",
+//   database: "blog",
+// }
 var connection = require('mysql').createPool(dbconfig);
 var bcrypt = require('bcrypt-nodejs');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+const upload = multer({ storage: storage })
 
 connection.query('USE ' + dbconfig.database, function(err, rows) {
   if (err) throw err;
@@ -105,13 +123,15 @@ module.exports = function(app, passport) {
   }
  })
 
- app.post('/add_post', isLoggedIn, function(req, res) {
+ app.post('/add_post', isLoggedIn, upload.single('image'), function(req, res) {
   if (req.user.status === "admin") {
-    console.log(req.user);
     console.log(req.body);
-    var insertQuery = "INSERT INTO posts (user_id, publisher_name, date_published, title, content) values (?, ?, NOW(), ?, ?)";
+    console.log(req.file.path);
+    const img = req.file;
+    var insertQuery = "INSERT INTO posts (user_id, publisher_name, date_published, img_url, img_alt, title, content) values (?, ?, NOW(), ?, ?, ?, ?)";
 
-    connection.query(insertQuery, [req.user.user_id, req.user.name, req.body.title, req.body.content],
+
+    connection.query(insertQuery, [req.user.user_id, req.user.name, req.file ? req.file.path : "", req.body.img_alt, req.body.title, req.body.content],
     function(err, rows){
       console.log(rows);
       if (err) console.log(err)
@@ -182,7 +202,7 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get("/edit_post/:postId", isLoggedIn, function(req, res) {
+  app.get("/edit_post/:postId", isLoggedIn, upload.single('image'), function(req, res) {
     if (req.user.status === "admin") {
       const postId = req.params.postId;
       connection.query(`select * from posts where post_id=${postId}`, function(err, rows) {
@@ -199,6 +219,7 @@ module.exports = function(app, passport) {
   app.post("/edit_post/:postId", isLoggedIn, function(req, res) {
     if (req.user.status === "admin") {
       const postId = req.params.postId;
+      const img = req.file;
       connection.query(`update posts set title=?, content=? where post_id=?`, [req.body.title, req.body.content, postId], function(err, rows) {
         if (err) console.log(err);
         console.log(rows);

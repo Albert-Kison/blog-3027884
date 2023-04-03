@@ -2,6 +2,12 @@ var LocalStrategy = require("passport-local").Strategy;
 
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
+// var dbconfig = {
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "12345MYsql!",
+//   database: "blog",
+// }
 var dbconfig = {
   host: "eu-cdbr-west-03.cleardb.net",
   user: "bd152ac13ceb1d",

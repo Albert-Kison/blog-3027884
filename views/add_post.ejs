@@ -42,10 +42,22 @@
 
     <main>
         <div id="add_post">
-            <form action="/add_post" method="post">
+            <form action="/add_post" method="post" enctype="multipart/form-data">
                 <div id="title-block">
                     <label for="title">Title</label><br>
                     <input type="text" name="title" required>
+                    <br>
+                </div>
+
+                <div id="img_url-block">
+                    <label for="image">Thumbnail image</label><br>
+                    <input type="file" accept="image/*" name="image">
+                    <br>
+                </div>
+
+                <div id="img_alt-block">
+                    <label for="img_alt">Image alt</label><br>
+                    <input type="text" name="img_alt">
                     <br>
                 </div>
 
