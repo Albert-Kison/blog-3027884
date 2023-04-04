@@ -17,6 +17,14 @@ nav {
     justify-content: space-between;
 }
 
+.form-group {
+    margin-top: 1rem;
+}
+
+textarea {
+    resize: none;
+}
+
 ul {
     list-style: none;
 }
@@ -69,3 +77,13 @@ nav a:hover {
 img {
     max-width: 100%;
 }
+
+main {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 1rem;
+}
+
+/* .post .title {
+    font-size: 5rem;
+} */

@@ -36,7 +36,7 @@ module.exports = function(app, passport) {
   console.log("iudhbiet iur tiurt hgiurt giurthgiurthgiurghiurhtguirhtgiurhgi rut");
   if (req.user && req.user.status === "admin") res.redirect("/admin")
   else {
-    connection.query("select * from posts", function(err, rows) {
+    connection.query("select * from posts limit 10", function(err, rows) {
       let error;
       if (err) {error = err;
       
@@ -67,11 +67,23 @@ module.exports = function(app, passport) {
     
     })
   }
+ });
+
+ app.get("/posts", function(req, res) {
+  connection.query("select * from posts", function(err, rows) {
+    let error;
+    if (err) {error = err;
+    
+    } 
+
+    res.render('blog.ejs', {isAuthenticated: req.isAuthenticated(), posts: rows, user: req.user, error: error});
+    
+  })
  })
 
  app.get('/login', function(req, res){
 	 //console.log(req.flash('loginMessage'));
-  res.render('login.ejs', {message:req.flash('loginMessage')});
+  res.render('login.ejs', {isAuthenticated: req.isAuthenticated(), message:req.flash('loginMessage')});
  });
 
  app.post('/login', passport.authenticate('local-login', {
@@ -89,7 +101,7 @@ module.exports = function(app, passport) {
   });
 
  app.get('/signup', function(req, res){
-  res.render('signup.ejs', {message: req.flash('signupMessage')});
+  res.render('signup.ejs', {isAuthenticated: req.isAuthenticated(), message: req.flash('signupMessage')});
  });
 
  app.post('/signup', passport.authenticate('local-signup', {
@@ -102,7 +114,7 @@ module.exports = function(app, passport) {
   connection.query(`select * from users where user_id=${req.user.user_id}`, function(err, rows) {
     const user = rows[0];
     res.render('profile.ejs', {
-      isAuthenticated: true,
+      isAuthenticated: req.isAuthenticated(),
      user: user
     });
   });
@@ -126,12 +138,11 @@ module.exports = function(app, passport) {
  app.post('/add_post', isLoggedIn, upload.single('image'), function(req, res) {
   if (req.user.status === "admin") {
     console.log(req.body);
-    console.log(req.file.path);
     const img = req.file;
     var insertQuery = "INSERT INTO posts (user_id, publisher_name, date_published, img_url, img_alt, title, content) values (?, ?, NOW(), ?, ?, ?, ?)";
 
 
-    connection.query(insertQuery, [req.user.user_id, req.user.name, req.file ? req.file.path : "", req.body.img_alt, req.body.title, req.body.content],
+    connection.query(insertQuery, [req.user.user_id, req.user.name, req.file ? req.file.path : "", req.file ? req.body.img_alt : "", req.body.title, req.body.content],
     function(err, rows){
       console.log(rows);
       if (err) console.log(err)
@@ -202,7 +213,7 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get("/edit_post/:postId", isLoggedIn, upload.single('image'), function(req, res) {
+  app.get("/edit_post/:postId", isLoggedIn, function(req, res) {
     if (req.user.status === "admin") {
       const postId = req.params.postId;
       connection.query(`select * from posts where post_id=${postId}`, function(err, rows) {
@@ -216,16 +227,26 @@ module.exports = function(app, passport) {
     }
   });
 
-  app.post("/edit_post/:postId", isLoggedIn, function(req, res) {
+  app.post("/edit_post/:postId", isLoggedIn, upload.single('image'), function(req, res) {
     if (req.user.status === "admin") {
       const postId = req.params.postId;
       const img = req.file;
-      connection.query(`update posts set title=?, content=? where post_id=?`, [req.body.title, req.body.content, postId], function(err, rows) {
-        if (err) console.log(err);
-        console.log(rows);
+      if (req.file) {
+        console.log(req.file.path);
+        connection.query(`update posts set img_url=?, img_alt=?, title=?, content=? where post_id=?`, [req.file.path, req.body.img_alt, req.body.title, req.body.content, postId], function(err, rows) {
+          if (err) console.log(err);
+          console.log(rows);
 
-        res.redirect("/");
-      })
+          res.redirect("/");
+        })
+      } else {
+        connection.query(`update posts set img_alt=?, title=?, content=? where post_id=?`, [req.body.img_alt, req.body.title, req.body.content, postId], function(err, rows) {
+          if (err) console.log(err);
+          console.log(rows);
+
+          res.redirect("/");
+        })
+      }
     } else {
       res.redirect("/")
     }
@@ -264,12 +285,16 @@ module.exports = function(app, passport) {
   app.post("/edit_user/:userId", isLoggedIn, function(req, res) {
     if (req.user.status === "admin") {
       const userId = req.params.userId;
-      connection.query(`update users set name=?, email=?, password=?, status=? where user_id=?`, [req.body.name, req.body.email, bcrypt.hashSync(req.body.password, null, null), req.body.user_status, userId], function(err, rows) {
-        if (err) console.log(err);
-        console.log(rows);
+      if (req.body.password === "") {
+        res.redirect("/edit_user/" + userId);
+      } else {
+        connection.query(`update users set name=?, email=?, password=?, status=? where user_id=?`, [req.body.name, req.body.email, bcrypt.hashSync(req.body.password, null, null), req.body.user_status, userId], function(err, rows) {
+          if (err) console.log(err);
+          console.log(rows);
 
-        res.redirect("/");
-      })
+          res.redirect("/");
+        })
+      }
     } else {
       res.redirect("/")
     }

@@ -1,21 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta http-equiv="X-UA-Compatible" content="ie=edge">
- <title>Login Register</title>
- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
- <link rel="stylesheet" 
- href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
- <style>
-  html{
-   padding:50px;
-  }
- </style>
-</head>
-<body>
- <div class="container">
+<%- include("partials/header"); -%>
+ <div class="container" style="margin-top: 1rem;">
   <div class="col-sm-6 col-sm-offset-3">
    <h2>Edit</h2>
 
@@ -33,24 +17,31 @@
      <input type="text" class="form-control" name="password">
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="user_status" value="user" checked>
+        <% if (user.status === "user") { %>
+            <input class="form-check-input" type="radio" name="user_status" value="user" checked>
+        <% } else { %>
+            <input class="form-check-input" type="radio" name="user_status" value="user">
+        <% } %>
         <label class="form-check-label" for="flexRadioDefault1">
           user
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="user_status" value="admin">
+        <% if (user.status === "admin") { %>
+            <input class="form-check-input" type="radio" name="user_status" value="admin" checked>
+        <% } else { %>
+            <input class="form-check-input" type="radio" name="user_status" value="admin" checked>
+        <% } %>
         <label class="form-check-label" for="flexRadioDefault2">
           admin
         </label>
       </div>
 
-    <button type="submit" class="btn btn-succcess btn-lg">Register</button>
+    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Submit</button>
    </form>
 
    <hr>
 
-   <p>Need an account <a href="/signup">Register</a></p>
    <p>Go Back <a href="/">Home</a>.</p>
   </div>
  </div>
