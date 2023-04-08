@@ -1,20 +1,7 @@
-var dbconfig = {
-  host: "eu-cdbr-west-03.cleardb.net",
-  user: "bd152ac13ceb1d",
-  password: "9c936981",
-  database: "heroku_7e6d39f4f942566",
-}
-
-// var dbconfig = {
-//   host: "127.0.0.1",
-//   user: "root",
-//   password: "12345MYsql!",
-//   database: "blog",
-// }
-var connection = require('mysql').createPool(dbconfig);
 var bcrypt = require('bcrypt-nodejs');
-const multer = require('multer');
 
+//configure image uploading
+const multer = require('multer');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads')
@@ -25,6 +12,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage })
 
+//connect to the database
+var dbconfig = require("../config/database");
+var connection = require('mysql').createPool(dbconfig);
 connection.query('USE ' + dbconfig.database, function(err, rows) {
   if (err) throw err;
   console.log("Connected!");
@@ -32,14 +22,17 @@ connection.query('USE ' + dbconfig.database, function(err, rows) {
 
 
 module.exports = function(app, passport) {
+  //This route is for users with status "user"
+  //It fetches 10 latest and renders the index.ejs page
  app.get('/', function(req, res){
-  console.log("iudhbiet iur tiurt hgiurt giurthgiurthgiurghiurhtguirhtgiurhgi rut");
+
+  //if the user is admin, then redirect to the admin page
   if (req.user && req.user.status === "admin") res.redirect("/admin")
   else {
     connection.query("select * from posts limit 10", function(err, rows) {
       let error;
-      if (err) {error = err;
-      
+      if (err) {
+        error = err;      
       } 
 
       res.render('index.ejs', {isAuthenticated: req.isAuthenticated(), posts: rows, error: error});
@@ -48,18 +41,23 @@ module.exports = function(app, passport) {
   }
  });
 
+ //This route is for users with status "admin"
+ //It fetches 10 latest and users and renders the admin.ejs page
  app.get("/admin", function(req, res) {
+  //check if the user is admin
   if (!req.isAuthenticated()) res.redirect("/")
   else if (req.user.status !== "admin") res.redirect("/");
   else {
-    connection.query("select * from posts", function(err, posts) {
+    connection.query("select * from posts limit 10", function(err, posts) {
     let error;
-    if (err) {error = err;
+    if (err) {
+      error = err;
     } 
     
     connection.query("select * from users", function(err, users) {
       let error;
-      if (err) {error = err;
+      if (err) {
+        error = err;
       } 
 
       res.render("admin.ejs", {isAuthenticated: req.isAuthenticated(), posts: posts, users: users, current_user: req.user, error: err});

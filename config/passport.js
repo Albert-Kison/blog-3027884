@@ -1,6 +1,4 @@
 var LocalStrategy = require("passport-local").Strategy;
-
-var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 // var dbconfig = {
 //   host: "127.0.0.1",
@@ -8,12 +6,9 @@ var bcrypt = require('bcrypt-nodejs');
 //   password: "12345MYsql!",
 //   database: "blog",
 // }
-var dbconfig = {
-  host: "eu-cdbr-west-03.cleardb.net",
-  user: "bd152ac13ceb1d",
-  password: "9c936981",
-  database: "heroku_7e6d39f4f942566",
-}
+
+//connect to the database
+var dbconfig = require("./database");
 var connection = require('mysql').createPool(dbconfig);
 
 connection.query('USE ' + dbconfig.database, function(err, rows) {
@@ -35,45 +30,47 @@ module.exports = function(passport) {
  });
 
  // Middleware - set up the strategy to be used for the sign in
- // LocalStrategy sets up login using username & password
- passport.use(
-  'local-signup',
-  new LocalStrategy({
-   usernameField : 'email',
-   passwordField: 'password',
-   passReqToCallback: true
-  },
-  function(req, email, password, done){
-   connection.query("SELECT * FROM users WHERE email = ? ", 
-   [email], function(err, rows){
-    if(err)
-     return done(err);
-    if(rows.length){
-     return done(null, false, req.flash('signupMessage', 'That is already taken'));
-    }else{
-     var newUserMysql = {
-      name: req.body.name,
-      email: email,
-      password: bcrypt.hashSync(password, null, null),
-      status: "user"
-     };
+ // LocalStrategy sets up login using email & password
+//  passport.use(
+//   'local-signup',
+//   new LocalStrategy({
+//    usernameField : 'email',
+//    passwordField: 'password',
+//    passReqToCallback: true
+//   },
+//   function(req, email, password, done){
+    
+//     //search the user by email
+//    connection.query("SELECT * FROM users WHERE email = ? ", 
+//    [email], function(err, rows){
+//     if(err)
+//      return done(err);
+//     if(rows.length){
+//      return done(null, false, req.flash('signupMessage', 'That is already taken'));
+//     }else{
+//      var newUserMysql = {
+//       name: req.body.name,
+//       email: email,
+//       password: bcrypt.hashSync(password, null, null),
+//       status: "user"
+//      };
 
-     var insertQuery = "INSERT INTO users (name, email, password, status) values (?, ?, ?, ?)";
+//      var insertQuery = "INSERT INTO users (name, email, password, status) values (?, ?, ?, ?)";
 
-     connection.query(insertQuery, [newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.status],
-      function(err, rows){
-        if (err) {
-          return done(err);
-        }
-        console.log(rows);
-       newUserMysql.user_id = rows.insertId;
+//      connection.query(insertQuery, [newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.status],
+//       function(err, rows){
+//         if (err) {
+//           return done(err);
+//         }
+//         console.log(rows);
+//        newUserMysql.user_id = rows.insertId;
 
-       return done(null, newUserMysql);
-      });
-    }
-   });
-  })
- );
+//        return done(null, newUserMysql);
+//       });
+//     }
+//    });
+//   })
+//  );
 
   // Middleware - set up the strategy to be used for the login
  passport.use(
@@ -89,10 +86,10 @@ module.exports = function(passport) {
     if(err)
      return done(err);
     if(!rows.length){
-     return done(null, false, req.flash('loginMessage', 'Incorrect username/password combination'));
+     return done(null, false, req.flash('loginMessage', 'Incorrect email/password combination'));
     }
     if(!bcrypt.compareSync(password, rows[0].password))
-     return done(null, false, req.flash('loginMessage', 'Incorrect username/password combination'));
+     return done(null, false, req.flash('loginMessage', 'Incorrect email/password combination'));
 
     return done(null, rows[0]);
    });

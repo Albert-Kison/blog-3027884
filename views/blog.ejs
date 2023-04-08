@@ -1,5 +1,8 @@
 <%- include("partials/header"); -%>
 <main>
+    <% if (user.status === "admin") { %>
+        <a href="/add_post" class="card-link btn btn-primary" style="margin-bottom: 1rem;">Add post</a>
+    <% } %>
     <% if (posts) { %>
         <% if (posts.length === 0) { %>
             <p>No posts</p>

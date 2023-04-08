@@ -1,10 +1,6 @@
 module.exports = {
- 'connection':{
-  'host':'127.0.0.1',
-  'user':'root',
-//   'port':3000,
-  'password':'12345MYsql!'
- },
- 'database':'blog',
- 'user_table':'users'
+  host: "eu-cdbr-west-03.cleardb.net",
+  user: "bd152ac13ceb1d",
+  password: "9c936981",
+  database: "heroku_7e6d39f4f942566",
 }
