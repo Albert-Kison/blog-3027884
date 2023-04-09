@@ -44,16 +44,19 @@ module.exports = function(app, passport) {
  //This route is for users with status "admin"
  //It fetches 10 latest and users and renders the admin.ejs page
  app.get("/admin", function(req, res) {
+
   //check if the user is admin
   if (!req.isAuthenticated()) res.redirect("/")
   else if (req.user.status !== "admin") res.redirect("/");
   else {
+    //get 10 latest posts
     connection.query("select * from posts limit 10", function(err, posts) {
     let error;
     if (err) {
       error = err;
     } 
     
+    //get the users
     connection.query("select * from users", function(err, users) {
       let error;
       if (err) {
@@ -67,23 +70,26 @@ module.exports = function(app, passport) {
   }
  });
 
+ //This route renders the blog.ejs page where all posts are displayed
  app.get("/posts", function(req, res) {
-  connection.query("select * from posts", function(err, rows) {
+  connection.query("select * from posts", function(err, posts) {
     let error;
-    if (err) {error = err;
-    
+    if (err) {
+      error = err;
     } 
 
-    res.render('blog.ejs', {isAuthenticated: req.isAuthenticated(), posts: rows, user: req.user, error: error});
+    res.render('blog.ejs', {isAuthenticated: req.isAuthenticated(), posts: posts, user: req.user, error: error});
     
   })
  })
 
+ //renders the login.ejs page
  app.get('/login', function(req, res){
 	 //console.log(req.flash('loginMessage'));
   res.render('login.ejs', {isAuthenticated: req.isAuthenticated(), message:req.flash('loginMessage')});
  });
 
+ //login sthe user through passport and sets the cookie
  app.post('/login', passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/login',
@@ -98,15 +104,15 @@ module.exports = function(app, passport) {
    res.redirect('/');
   });
 
- app.get('/signup', function(req, res){
-  res.render('signup.ejs', {isAuthenticated: req.isAuthenticated(), message: req.flash('signupMessage')});
- });
+//  app.get('/signup', function(req, res){
+//   res.render('signup.ejs', {isAuthenticated: req.isAuthenticated(), message: req.flash('signupMessage')});
+//  });
 
- app.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/',
-  failureRedirect: '/signup',
-  failureFlash: true
- }));
+//  app.post('/signup', passport.authenticate('local-signup', {
+//   successRedirect: '/',
+//   failureRedirect: '/signup',
+//   failureFlash: true
+//  }));
 
  app.get('/profile', isLoggedIn, function(req, res){
   connection.query(`select * from users where user_id=${req.user.user_id}`, function(err, rows) {
