@@ -36,6 +36,6 @@ app.use(flash()); //
 require('./routes/routes.js')(app, passport);
 
 // process.env.PORT || 5000
-app.listen(3000, function () {
+app.listen(process.env.PORT || 5000, function () {
   console.log("Server listening on port 3000"); 
 });
