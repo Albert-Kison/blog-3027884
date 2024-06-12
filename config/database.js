@@ -1,6 +1,6 @@
 module.exports = {
-  host: "bxtgz3ttntgbrjoyqcev-mysql.services.clever-cloud.com",
-  user: "u4yfnnyystynknod",
-  password: "w0zHP4eDWgkp7rbxZYiT!",
-  database: "bxtgz3ttntgbrjoyqcev",
+  DB_HOST: "bxtgz3ttntgbrjoyqcev-mysql.services.clever-cloud.com",
+  DB_USERNAME: "u4yfnnyystynknod",
+  DB_PASSWORD: "w0zHP4eDWgkp7rbxZYiT!",
+  DB_DBNAME: "bxtgz3ttntgbrjoyqcev",
 }
