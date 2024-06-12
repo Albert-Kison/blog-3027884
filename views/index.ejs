@@ -1,0 +1,43 @@
+<%- include("partials/header"); -%>
+
+    <main style="min-height: 100vh;">
+        <h1 class="title display-3">Introduction</h1>
+        <p style="font-size: 1.3rem;">Welcome to our website dedicated to all the things about airplanes! From the latest developments in aviation technology to the fascinating history of flight, we are your go-to source for information and insights about the world of airplanes.</p>
+
+        <p style="font-size: 1.3rem;">Whether you are an aviation enthusiast, a student of aeronautics, or simply curious about the incredible machines that take us to the skies, our website is designed to provide you with a wealth of knowledge and entertainment.</p>
+        
+        <p style="font-size: 1.3rem;">We cover a wide range of topics related to airplanes, including the latest news and trends in the aviation industry, the science behind how airplanes fly, the different types of planes and their unique features, and the amazing stories of the pioneers who have made aviation history.</p>
+            
+        <p style="font-size: 1.3rem;">So fasten your seatbelts and prepare for takeoff as we explore the exciting world of airplanes!</p>
+        <% if (posts) { %>
+            <% if (posts.length === 0) { %>
+                <p style="font-size: 1.3rem;">No posts</p>
+            <% } else if (posts.length > 0) { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% for (let i = 0; i < posts.length; i++) { %>
+                        
+                        <div class="col">
+                            <div class="card">
+                                <% if (posts[i].img_url !== "") { %>
+                                    <img src="/<%= posts[i].img_url %>" class="card-img-top" alt="<%= posts[i].img_alt %>" style="max-height: 15rem; object-fit: cover;">
+                                <% } %>
+                              <div class="card-body">
+                                <h5 class="card-title"><%= posts[i].title %></h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Published by <%= posts[i].publisher_name %> on <%= `${new Date(posts[i].date_published).getDate().toString().padStart(2, '0')}/${(new Date(posts[i].date_published).getMonth() + 1).toString().padStart(2, '0')}/${new Date(posts[i].date_published).getFullYear().toString()}` %></h6>
+                                <% if (posts[i].content.length > 100) { %>
+                                    <p class="card-text"><%= posts[i].content.substring(0,100) + "..." %></p>
+                                <% } else { %>
+                                    <p class="card-text"><%= posts[i].content%></p>
+                                <% } %>
+                                <a href="/post/<%= posts[i].post_id %>" class="card-link btn btn-primary">Read</a>
+                              </div>
+                            </div>
+                          </div>
+                    <% } %>
+                </div>
+            <% } %>
+        <% } %>
+
+    </main>
+    
+<%- include("partials/footer"); -%>

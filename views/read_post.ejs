@@ -1,0 +1,57 @@
+<%- include("partials/header"); -%>
+
+    <main style="min-height: 100vh;">
+        <div class="post">
+            <div class="post-content">
+                <h1 class="title display-3"><%= post.title %></h1>
+                <p class="publisher">Published by <%= post.publisher_name %> on <%= `${new Date(post.date_published).getDate().toString().padStart(2, '0')}/${(new Date(post.date_published).getMonth() + 1).toString().padStart(2, '0')}/${new Date(post.date_published).getFullYear().toString()}` %></p>
+                <% if (post.img_url) { %>
+                    <img src="/<%= post.img_url %>" alt="<%= post.img_alt %>" style="display: block; max-width: 70%; margin-left: auto; margin-right: auto;">
+                    <div class="img_alt" style="text-align: center;"><%= post.img_alt %></div>
+                <% } %>
+
+                <% const paragraphs = post.content.split("\n") %>
+                <% for (let i = 0; i < paragraphs.length; i++) { %>
+                    <p class="content" style="font-size: 1.3rem;"><%= paragraphs[i] %></p>
+                <% } %>
+            </div>
+
+            <% if (comments) { %>
+                <ol class="list-group" style="font-size: 1.1rem;">
+                    <% for (let i = 0; i < comments.length; i++) { %>
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="background-color: #DEDEDE; border: none;">
+                            <div class="ms-2 me-auto">
+                            <div class="fw">Commented by <%= comments[i].user.name %></div>
+                            <%= comments[i].comment.comment %> <br>
+                            <% if (isAuthenticated) { %>
+                                <% if (current_user.user_id === comments[i].user.user_id || current_user.status === "admin") { %>
+                                    <a href="/edit_comment/<%= post.post_id %>/<%= comments[i].comment.comment_id %>" class="card-link btn btn-warning btn-sm">Edit</a>
+                                    <a href="/remove_comment/<%= post.post_id %>/<%= comments[i].comment.comment_id %>" class="card-link btn btn-danger btn-sm">Remove</a>
+                                <% } %>
+                            <% } %> 
+                            </div>
+                        </li>
+                        <!-- <p>Posted by <%= comments[i].user.name %></p>
+                        <p><%= comments[i].comment.comment %></p>                        
+                        <% if (isAuthenticated) { %>
+                            <% if (current_user.user_id === comments[i].user.user_id || current_user.status === "admin") { %>
+                                <a href="/edit_comment/<%= post.post_id %>/<%= comments[i].comment.comment_id %>">Edit</a>
+                                <a href="/remove_comment/<%= post.post_id %>/<%= comments[i].comment.comment_id %>">Delete</a>
+                            <% } %>
+                        <% } %> -->
+                    <% } %>
+                </div>
+            <% } %>
+
+            <form action="/add_comment/<%= post.post_id %>" method="post" style="width: 60%;">
+                <div class="input-group flex-nowrap card-body">
+                    <input type="text" class="form-control" placeholder="Your comment..." aria-describedby="addon-wrapping" name="comment" style="background-color: #ececec;">
+                    <input type="submit" class="btn btn-outline-secondary" type="button" id="button-addon2" value="Post">
+                </div>
+
+                <!-- <input type="submit" value="Post"> -->
+            </form>
+        </div>
+    </main>
+
+<%- include("partials/footer"); -%>

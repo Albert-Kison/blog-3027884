@@ -1,0 +1,76 @@
+<%- include("partials/header"); -%>
+
+    <main style="min-height: 100vh;">
+        <div class="container">
+            <div class="row">
+                
+                            
+                <div class="col-lg-7">
+                    <a href="/add_post" class="card-link btn btn-primary" style="margin-bottom: 1rem;">Add post</a>
+                    <% if (posts) { %>
+                        <% if (posts.length === 0) { %>
+                            <p>No posts</p>
+                        <% } else if (posts.length > 0) { %>
+                    <% for (let i = 0; i < posts.length; i++) { %>
+                        <div class="col">
+                            <div class="card" style="margin-bottom: 1rem;">
+                                <% if (posts[i].img_url !== "") { %>
+                                    <img src="/<%= posts[i].img_url %>" class="card-img-top" alt="<%= posts[i].img_alt %>" style="max-height: 15rem; object-fit: cover;">
+                                <% } %>
+                                <div class="card-body">
+                                <h5 class="card-title"><%= posts[i].title %></h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Published by <%= posts[i].publisher_name %> on <%= `${new Date(posts[i].date_published).getDate().toString().padStart(2, '0')}/${(new Date(posts[i].date_published).getMonth() + 1).toString().padStart(2, '0')}/${new Date(posts[i].date_published).getFullYear().toString()}` %></h6>
+                                <% if (posts[i].content.length > 100) { %>
+                                    <p class="card-text"><%= posts[i].content.substring(0,100) + "..." %></p>
+                                <% } else { %>
+                                    <p class="card-text"><%= posts[i].content%></p>
+                                <% } %>
+                                <a href="/post/<%= posts[i].post_id %>" class="card-link btn btn-primary">Read</a>
+                                <a href="/edit_post/<%= posts[i].post_id %>" class="card-link btn btn-warning">Edit</a>
+                                <a href="/remove_post/<%= posts[i].post_id %>" class="card-link btn btn-danger">Remove</a>
+                            </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% } %>
+                <% } %>
+                    </div>
+                    <div class="users col-lg-5">
+                    <a href="/add_user" class="card-link btn btn-primary" style="margin-bottom: 1rem;">Add user</a>
+
+                            <% if (users.length > 1) { %>
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>  
+                                    <% for (let i = 0; i < users.length; i++) { %>
+                                        <tr>
+                                            <% if (users[i].user_id !== current_user.user_id) { %>
+                                                <th scope="row"><%= i %></th>
+                                                <td><%= users[i].name %></td>
+                                                <td><%= users[i].email %></td>
+                                                <td><%= users[i].status %></td>
+                                                <td>
+                                                    <a href="/edit_user/<%= users[i].user_id %>" class="card-link btn btn-warning btn-sm">Edit</a>
+                                                    <a href="/remove_user/<%= users[i].user_id %>" class="card-link btn btn-danger btn-sm">Remove</a>
+                                                </td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
+                
+        </div>
+        </div>
+
+    </main>
+    
+<%- include("partials/footer"); -%>

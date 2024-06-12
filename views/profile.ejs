@@ -1,0 +1,28 @@
+<%- include("partials/header"); -%>
+
+<main style="min-height: 100vh;">
+<!-- <h1 class="title display-5">My profile</h1> -->
+
+ <div class="container">
+  <div class="page-header text-center">
+   <h1>My Profile</h1>
+   <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+  </div>
+
+  <div class="row">
+   <div class="col-sm-12">
+    <div class="well">
+     <h3><span class="fa fa-user"></span> Welcome <%= user.name %></h3>
+
+     <p>
+      <strong>id:</strong> <%= user.user_id %> <br>
+      <strong>email:</strong> <%= user.email %> <br>
+      <strong>status:</strong> <%= user.status %> <br>
+     </p>
+    </div>
+   </div>
+  </div>
+ </div>
+</main>
+
+<%- include("partials/footer"); -%>
