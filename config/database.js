@@ -1,6 +1,6 @@
 module.exports = {
-  DB_HOST: "bxtgz3ttntgbrjoyqcev-mysql.services.clever-cloud.com",
-  DB_USERNAME: "u4yfnnyystynknod",
-  DB_PASSWORD: "w0zHP4eDWgkp7rbxZYiT!",
-  DB_DBNAME: "bxtgz3ttntgbrjoyqcev",
+  host: "eu-cluster-west-01.k8s.cleardb.net",
+  user: "bfe3b37575de05",
+  password: "c82fda53!",
+  database: "heroku_929bad8b21cea22",
 }
