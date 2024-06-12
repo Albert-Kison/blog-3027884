@@ -162,19 +162,19 @@ module.exports = function(app, passport) {
 
 
  //renders add_user.ejs which allows the admin users to add a user
- app.get('/add_user', function(req, res) {
-  //  if (req.user.status === "admin") {
+ app.get('/add_user', isLoggedIn, function(req, res) {
+   if (req.user.status === "admin") {
      res.render('add_user.ejs', {isAuthenticated: req.isAuthenticated()});
-  //  } else {
-  //    res.redirect("/");
-  //  }
+   } else {
+     res.redirect("/");
+   }
   });
 
 
 
   //processes the form and inserts the user into the users table
-  app.post('/add_user', function(req, res) {
-    // if (req.user.status === "admin") {
+  app.post('/add_user', isLoggedIn, function(req, res) {
+    if (req.user.status === "admin") {
       console.log(req.body);
       var insertQuery = "INSERT INTO users (name, email, password, status) values (?, ?, ?, ?)";
   
@@ -184,9 +184,9 @@ module.exports = function(app, passport) {
         if (err) console.log(err)
         else res.redirect("/");
       });
-    // } else {
-    //   res.redirect("/");
-    // }
+    } else {
+      res.redirect("/");
+    }
   });
 
 
