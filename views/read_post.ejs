@@ -3,7 +3,7 @@
     <main style="min-height: 100vh;">
         <div class="post">
             <div class="post-content">
-                <h1 class="title display-3"><%= post.title %></h1>
+                <h1 class="title display-5"><%= post.title %></h1>
                 <p class="publisher">Published by <%= post.publisher_name %> on <%= `${new Date(post.date_published).getDate().toString().padStart(2, '0')}/${(new Date(post.date_published).getMonth() + 1).toString().padStart(2, '0')}/${new Date(post.date_published).getFullYear().toString()}` %></p>
                 <% if (post.img_url) { %>
                     <img src="/<%= post.img_url %>" alt="<%= post.img_alt %>" style="display: block; max-width: 70%; margin-left: auto; margin-right: auto;">

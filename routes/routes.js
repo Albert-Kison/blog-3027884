@@ -209,6 +209,8 @@ module.exports = function(app, passport) {
         }
         console.log(comments);
 
+        console.log("Read post");
+        console.log(posts[0].img_url);
         res.render("read_post", {isAuthenticated: req.isAuthenticated(), post: posts[0], comments: comments, current_user: req.user});
       });
     });
