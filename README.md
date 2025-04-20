@@ -27,9 +27,3 @@ A blogging platform where users can create and share blog posts with comments an
 
 ## Link
 https://blog-website-nodejs-fcb2a1428b16.herokuapp.com
-
-## How to Run
-1. Clone this repository
-2. Install dependencies: `npm install`
-3. Configure the `.env` file for MySQL connection
-4. Run the app: `node app.js`
