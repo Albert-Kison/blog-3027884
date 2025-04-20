@@ -16,14 +16,14 @@ A blogging platform where users can create and share blog posts with comments an
 - HTML, CSS
 - Express-session for login sessions
 
-## Screenshot
-![alt text](https://github.com/Albert-Kison/blog-3027884/blob/main/Screenshot_Blog_Homepage.png)
-
 ## What I Learned
 - User authentication with sessions
 - Server-side rendering with EJS
 - Connecting Node.js to MySQL
 - Admin/user role separation
+
+## Screenshot
+![Homepage](https://github.com/Albert-Kison/blog-3027884/blob/main/Screenshot_Blog_Homepage.png)
 
 ## Link
 https://blog-website-nodejs-fcb2a1428b16.herokuapp.com
